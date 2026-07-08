@@ -24,10 +24,30 @@ curl http://158.160.201.220
 
 ### Скриншоты
 
-- `01-vms.png` — список виртуальных машин.
-- `02-private-route.png` — таблица маршрутизации `private-route`.
-- `03-load-balancer.png` — L7 Application Load Balancer в статусе **Active**.
-- `04-web1-nginx.png` — статус службы Nginx на `web-1`.
-- `05-web2-nginx.png` — статус службы Nginx на `web-2`.
-- `06-curl-balancer.png` — проверка доступа к сайту через балансировщик.
-- `07-load-balancing.png` — проверка распределения запросов между `web-1` и `web-2`.
+#### Виртуальные машины
+
+![ВМ](screenshots/01-vms.png)
+
+#### NAT Gateway
+
+![NAT](screenshots/02-nat-route.png)
+
+#### Балансировщик
+
+![LB](screenshots/03-load-balancer.png)
+
+#### WEB-1
+
+![WEB1](screenshots/04-web1-nginx.png)
+
+#### WEB-2
+
+![WEB2](screenshots/05-web2-nginx.png)
+
+#### Проверка curl
+
+![curl](screenshots/06-curl-balancer.png)
+
+#### Проверка балансировки
+
+![balance](screenshots/07-load-balancing.png)
