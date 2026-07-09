@@ -77,3 +77,27 @@ curl http://158.160.201.220
 #### Dashboard
 
 ![Zabbix Dashboard](screenshots/09-zabbix-dashboard.png)
+
+## 3. Сбор логов
+
+Выполнено:
+
+- развернут Elasticsearch 8.18 в Docker;
+- развернута Kibana 8.18 в Docker;
+- на web-1 и web-2 установлен Filebeat;
+- настроена отправка access.log и error.log Nginx в Elasticsearch;
+- в Kibana успешно отображаются логи обоих веб-серверов.
+
+### Скриншоты
+
+#### Elasticsearch
+
+![Elasticsearch](screenshots/09-elasticsearch.png)
+
+#### Kibana
+
+![Kibana](screenshots/10-kibana.png)
+
+#### Логи в Discover
+
+![Discover](screenshots/11-kibana-discover.png)
