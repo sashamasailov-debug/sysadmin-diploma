@@ -1,117 +1,211 @@
 # Дипломная работа по профессии «Системный администратор»
 
-## Выполнение дипломной работы
+## Описание проекта
 
-### 1. Сайт
+Разработана отказоустойчивая инфраструктура для веб-приложения в Yandex Cloud с использованием Terraform и Ansible.
 
-Выполнено:
+Инфраструктура включает:
 
-- создан bastion-хост для SSH-доступа к серверам внутренней сети;
-- созданы два веб-сервера `web-1` и `web-2` в разных зонах доступности;
-- настроен NAT Gateway и таблица маршрутизации `private-route` для приватных подсетей;
-- установлен и запущен Nginx на обоих веб-серверах;
-- создан и настроен L7 Application Load Balancer;
-- настроены Target Group, Backend Group и HTTP Router;
-- выполнена проверка работы балансировщика.
+- Terraform
+- Ansible
+- Bastion Host
+- Nginx
+- Application Load Balancer
+- Zabbix
+- Elasticsearch
+- Kibana
+- Filebeat
+- Snapshot Backup
 
-### Проверка
+---
 
-```bash
-curl http://158.160.201.220
+# Используемые технологии
+
+- Yandex Cloud
+- Terraform
+- Ansible
+- Ubuntu 22.04
+- Docker
+- Nginx
+- Zabbix 7
+- Elasticsearch 8
+- Kibana 8
+- Filebeat
+
+---
+
+# Структура инфраструктуры
+
+```
+Internet
+     │
+Application Load Balancer
+     │
+ ┌──────┴──────┐
+ │             │
+web-1       web-2
+ │             │
+ └──────┬──────┘
+        │
+ Elasticsearch
+        │
+     Kibana
+
+Bastion Host
+
+Zabbix Server
 ```
 
-Балансировщик успешно распределяет запросы между серверами `web-1` и `web-2`.
+---
 
-### Скриншоты
+# Виртуальные машины
 
-#### Виртуальные машины
+| ВМ | Назначение |
+|-----|------------|
+| bastion | SSH-доступ к приватным ВМ |
+| web-1 | Nginx |
+| web-2 | Nginx |
+| elasticsearch | Хранение логов |
+| kibana | Просмотр логов |
+| zabbix | Мониторинг |
 
-![ВМ](screenshots/01-vms.png)
+---
 
-#### NAT Gateway
+# Terraform
 
-![NAT](screenshots/02-nat-route.png)
+Конфигурация разбита на отдельные файлы:
 
-#### Балансировщик
+```
+terraform/
 
-![LB](screenshots/03-load-balancer.png)
+provider.tf
+network.tf
+compute.tf
+security.tf
+alb.tf
+backup.tf
+variables.tf
+outputs.tf
+```
 
-#### WEB-1
+---
 
-![WEB1](screenshots/04-web1-nginx.png)
+# Ansible
 
-#### WEB-2
+Используются отдельные playbook:
 
-![WEB2](screenshots/05-web2-nginx.png)
+```
+ansible/
 
-#### Проверка curl
+inventory.ini
+ansible.cfg
 
-![curl](screenshots/06-curl-balancer.png)
+nginx.yml
+docker.yml
+zabbix.yml
+elastic-docker.yml
+kibana-docker.yml
+filebeat.yml
+```
 
-#### Проверка балансировки
+---
 
-![balance](screenshots/07-load-balancing.png)
+# Проверка работы сайта
 
-## 2. Мониторинг
+Сайт доступен через Application Load Balancer.
 
-В рамках выполнения дипломной работы развернут сервер мониторинга Zabbix 7.0.
+## Скриншот
 
-На серверах `web-1` и `web-2` установлен и настроен `Zabbix Agent 2`. После подключения агенты успешно зарегистрированы на сервере Zabbix и находятся в состоянии **Available (ZBX)**.
+![](screenshots/03-site.png)
 
-Создан Dashboard для мониторинга основных показателей серверов.
+---
 
-На панели мониторинга отображаются:
+# Мониторинг
 
-- загрузка процессора (CPU);
-- использование оперативной памяти (RAM);
-- использование дискового пространства;
-- входящий сетевой трафик;
-- исходящий сетевой трафик.
+Все серверы подключены к Zabbix Agent.
 
-### Скриншоты
+## Hosts
 
-#### Подключенные хосты
+![](screenshots/04-zabbix-hosts.png)
 
-![Zabbix Hosts](screenshots/08-zabbix-hosts.png)
+## Dashboard
 
-#### Dashboard
+![](screenshots/05-zabbix-dashboard.png)
 
-![Zabbix Dashboard](screenshots/09-zabbix-dashboard.png)
+---
 
-## 3. Сбор логов
+# Логирование
 
-Выполнено:
+Используется Filebeat.
 
-- развернут Elasticsearch 8.18 в Docker;
-- развернута Kibana 8.18 в Docker;
-- на web-1 и web-2 установлен Filebeat;
-- настроена отправка access.log и error.log Nginx в Elasticsearch;
-- в Kibana успешно отображаются логи обоих веб-серверов.
+Логи nginx передаются в Elasticsearch.
 
-### Скриншоты
+Просмотр осуществляется через Kibana.
 
-#### Elasticsearch
+## Kibana
 
-![Elasticsearch](screenshots/09-elasticsearch.png)
+![](screenshots/06-kibana-discover.png)
 
-#### Kibana
+## Elasticsearch
 
-![Kibana](screenshots/10-kibana.png)
+![](screenshots/07-elasticsearch.png)
 
-#### Логи в Discover
+---
 
-![Discover](screenshots/11-kibana-discover.png)
+# Snapshot Backup
 
-## 4. Резервное копирование
+Настроено ежедневное резервное копирование всех виртуальных машин.
 
-Выполнено:
+Срок хранения:
 
-- создано расписание ежедневного резервного копирования;
-- в расписание добавлены все виртуальные машины;
-- хранится 7 последних снимков.
+- 7 дней
 
-### Скриншоты
+## Snapshot Schedule
 
-#### Расписание резервного копирования
+![](screenshots/08-snapshot-schedule.png)
 
-![Backup](screenshots/13-backup-schedule.png)
+---
+
+# Terraform Apply
+
+Последнее успешное применение конфигурации.
+
+![](screenshots/09-terraform-apply.png)
+
+---
+
+# Структура проекта
+
+![](screenshots/10-project-tree.png)
+
+---
+
+# Виртуальные машины
+
+![](screenshots/01-yandex-cloud-vms.png)
+
+---
+
+# Load Balancer
+
+![](screenshots/02-load-balancer.png)
+
+
+---
+
+# Итог
+
+В ходе выполнения дипломной работы была создана отказоустойчивая инфраструктура в Yandex Cloud.
+
+Реализованы:
+
+- Terraform-развертывание инфраструктуры
+- Настройка сети и Security Groups
+- Bastion Host
+- Два Web-сервера
+- Application Load Balancer
+- Мониторинг Zabbix
+- Elasticsearch
+- Kibana
+- Filebeat
+- Snapshot Backup
