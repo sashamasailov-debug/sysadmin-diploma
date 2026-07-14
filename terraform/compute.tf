@@ -2,6 +2,9 @@ resource "yandex_compute_instance" "bastion" {
   name     = "bastion"
   hostname = "bastion"
 
+  allow_stopping_for_update = true
+
+
   platform_id = "standard-v3"
   zone        = "ru-central1-a"
 
@@ -12,7 +15,7 @@ resource "yandex_compute_instance" "bastion" {
   }
 
   scheduling_policy {
-    preemptible = true
+    preemptible = false
   }
 
   boot_disk {
@@ -33,9 +36,13 @@ resource "yandex_compute_instance" "bastion" {
     ssh-keys = "ubuntu:${file("C:/Users/Sasha/Desktop/ДОМАШКА/ssh-key-1779172438900/ssh-key-1779172438900.pub")}"
   }
 }
+
 resource "yandex_compute_instance" "web1" {
   name     = "web-1"
   hostname = "web-1"
+
+  allow_stopping_for_update = true
+
 
   platform_id = "standard-v3"
   zone        = "ru-central1-b"
@@ -47,7 +54,7 @@ resource "yandex_compute_instance" "web1" {
   }
 
   scheduling_policy {
-    preemptible = true
+    preemptible = false
   }
 
   boot_disk {
@@ -68,9 +75,13 @@ resource "yandex_compute_instance" "web1" {
     ssh-keys = "ubuntu:${file("C:/Users/Sasha/Desktop/ДОМАШКА/ssh-key-1779172438900/ssh-key-1779172438900.pub")}"
   }
 }
+
 resource "yandex_compute_instance" "web2" {
   name     = "web-2"
   hostname = "web-2"
+
+  allow_stopping_for_update = true
+
 
   platform_id = "standard-v3"
   zone        = "ru-central1-d"
@@ -82,7 +93,7 @@ resource "yandex_compute_instance" "web2" {
   }
 
   scheduling_policy {
-    preemptible = true
+    preemptible = false
   }
 
   boot_disk {
@@ -103,9 +114,13 @@ resource "yandex_compute_instance" "web2" {
     ssh-keys = "ubuntu:${file("C:/Users/Sasha/Desktop/ДОМАШКА/ssh-key-1779172438900/ssh-key-1779172438900.pub")}"
   }
 }
+
 resource "yandex_compute_instance" "elasticsearch" {
-  name     = "elasticsearch"
-  hostname = "elasticsearch"
+name     = "elasticsearch"
+hostname = "elasticsearch"
+
+  allow_stopping_for_update = true
+
 
   platform_id = "standard-v3"
   zone        = "ru-central1-d"
@@ -117,7 +132,7 @@ resource "yandex_compute_instance" "elasticsearch" {
   }
 
   scheduling_policy {
-    preemptible = true
+    preemptible = false
   }
 
   boot_disk {
@@ -138,9 +153,13 @@ resource "yandex_compute_instance" "elasticsearch" {
     ssh-keys = "ubuntu:${file("C:/Users/Sasha/Desktop/ДОМАШКА/ssh-key-1779172438900/ssh-key-1779172438900.pub")}"
   }
 }
+
 resource "yandex_compute_instance" "zabbix" {
   name     = "zabbix"
   hostname = "zabbix"
+
+  allow_stopping_for_update = true
+
 
   platform_id = "standard-v3"
   zone        = "ru-central1-a"
@@ -152,7 +171,7 @@ resource "yandex_compute_instance" "zabbix" {
   }
 
   scheduling_policy {
-    preemptible = true
+    preemptible = false
   }
 
   boot_disk {
@@ -173,9 +192,13 @@ resource "yandex_compute_instance" "zabbix" {
     ssh-keys = "ubuntu:${file("C:/Users/Sasha/Desktop/ДОМАШКА/ssh-key-1779172438900/ssh-key-1779172438900.pub")}"
   }
 }
+
 resource "yandex_compute_instance" "kibana" {
   name     = "kibana"
   hostname = "kibana"
+
+  allow_stopping_for_update = true
+
 
   platform_id = "standard-v3"
   zone        = "ru-central1-a"
@@ -187,7 +210,7 @@ resource "yandex_compute_instance" "kibana" {
   }
 
   scheduling_policy {
-    preemptible = true
+    preemptible = false
   }
 
   boot_disk {
