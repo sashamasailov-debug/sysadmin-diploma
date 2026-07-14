@@ -1,0 +1,4 @@
+service_account_key_file = "C:/Users/USERNAME/path/authorized_key.json"
+
+cloud_id  = "xxxxxxxxxxxxxxxxxxxx"
+folder_id = "xxxxxxxxxxxxxxxxxxxx"

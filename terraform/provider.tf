@@ -10,10 +10,8 @@ terraform {
 }
 
 provider "yandex" {
-  service_account_key_file = "C:/Users/Sasha/Desktop/yc-key/authorized_key.json"
-
-  cloud_id  = "b1gsku7td22n58hs2o66"
-  folder_id = "b1g5rnrcmq5c035145tu"
-
-  zone = "ru-central1-a"
+  service_account_key_file = var.service_account_key_file
+  cloud_id                 = var.cloud_id
+  folder_id                = var.folder_id
+  zone                     = "ru-central1-a"
 }
