@@ -1,0 +1,41 @@
+---
+- name: Install Elasticsearch
+  hosts: elasticsearch
+  become: yes
+
+  tasks:
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - openjdk-21-jdk
+          - gnupg
+        state: present
+        update_cache: yes
+
+    - name: Add Elastic GPG key
+      shell: |
+        wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg
+      args:
+        creates: /usr/share/keyrings/elasticsearch-keyring.gpg
+
+    - name: Add Elastic repository
+      copy:
+        dest: /etc/apt/sources.list.d/elastic-8.x.list
+        content: |
+          deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main
+
+    - name: Update apt
+      apt:
+        update_cache: yes
+
+    - name: Install Elasticsearch
+      apt:
+        name: elasticsearch
+        state: present
+
+    - name: Enable Elasticsearch
+      systemd:
+        name: elasticsearch
+        enabled: yes
+        state: started

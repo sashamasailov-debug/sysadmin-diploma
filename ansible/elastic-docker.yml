@@ -1,0 +1,18 @@
+---
+- name: Run Elasticsearch
+  hosts: elasticsearch
+  become: yes
+
+  tasks:
+    - name: Run Elasticsearch container
+      docker_container:
+        name: elasticsearch
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.18.0
+        state: started
+        restart_policy: always
+        ports:
+          - "9200:9200"
+        env:
+          discovery.type: single-node
+          xpack.security.enabled: "false"
+          ES_JAVA_OPTS: "-Xms512m -Xmx512m"

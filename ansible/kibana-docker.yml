@@ -1,0 +1,22 @@
+---
+- name: Run Kibana
+  hosts: kibana
+  become: yes
+
+  tasks:
+    - name: Install Python Docker SDK
+      apt:
+        name: python3-docker
+        state: present
+        update_cache: yes
+
+    - name: Run Kibana container
+      docker_container:
+        name: kibana
+        image: docker.elastic.co/kibana/kibana:8.18.0
+        state: started
+        restart_policy: always
+        ports:
+          - "5601:5601"
+        env:
+          ELASTICSEARCH_HOSTS: "http://10.130.0.7:9200"

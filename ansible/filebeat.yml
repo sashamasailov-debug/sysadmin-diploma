@@ -1,0 +1,40 @@
+---
+- name: Run Filebeat
+  hosts: web
+  become: yes
+
+  tasks:
+    - name: Create Filebeat config directory
+      file:
+        path: /etc/filebeat
+        state: directory
+
+    - name: Copy Filebeat config
+      copy:
+        dest: /etc/filebeat/filebeat.yml
+        content: |
+          filebeat.inputs:
+            - type: log
+              enabled: true
+              paths:
+                - /var/log/nginx/access.log
+                - /var/log/nginx/error.log
+
+          output.elasticsearch:
+            hosts: ["10.130.0.7:9200"]
+
+          setup.kibana:
+            host: "10.128.0.25:5601"
+
+    - name: Remove old Filebeat container
+      shell: docker rm -f filebeat || true
+
+    - name: Run Filebeat container
+      shell: |
+        docker run -d \
+          --name filebeat \
+          --restart unless-stopped \
+          --user=root \
+          -v /var/log:/var/log:ro \
+          -v /etc/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro \
+          docker.elastic.co/beats/filebeat:8.18.0

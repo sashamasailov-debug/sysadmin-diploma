@@ -1,0 +1,23 @@
+---
+- name: Install Docker
+  hosts:
+    - elasticsearch
+    - kibana
+  become: yes
+
+  tasks:
+    - name: Update apt
+      apt:
+        update_cache: yes
+
+    - name: Install packages
+      apt:
+        name:
+          - docker.io
+        state: present
+
+    - name: Enable Docker
+      systemd:
+        name: docker
+        enabled: yes
+        state: started

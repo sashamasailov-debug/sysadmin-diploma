@@ -1,0 +1,20 @@
+---
+- name: Install Zabbix Agent
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Zabbix Agent
+      apt:
+        name: zabbix-agent
+        state: present
+
+    - name: Enable and start Zabbix Agent
+      service:
+        name: zabbix-agent
+        state: started
+        enabled: yes
