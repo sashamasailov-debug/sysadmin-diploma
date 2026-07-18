@@ -1,0 +1,61 @@
+---
+- name: Install Zabbix Server
+  hosts: zabbix
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install PostgreSQL
+      apt:
+        name:
+          - postgresql
+          - postgresql-contrib
+        state: present
+
+    - name: Install Zabbix Server packages
+      apt:
+        name:
+          - zabbix-server-pgsql
+          - zabbix-frontend-php
+          - zabbix-nginx-conf
+          - zabbix-sql-scripts
+        state: present
+
+    - name: Configure DBName
+      lineinfile:
+        path: /etc/zabbix/zabbix_server.conf
+        regexp: '^DBName='
+        line: 'DBName=zabbix'
+
+    - name: Configure DBUser
+      lineinfile:
+        path: /etc/zabbix/zabbix_server.conf
+        regexp: '^DBUser='
+        line: 'DBUser=zabbix'
+
+    - name: Configure DBPassword
+      lineinfile:
+        path: /etc/zabbix/zabbix_server.conf
+        regexp: '^DBPassword='
+        line: 'DBPassword=Zabbix123!'
+
+    - name: Enable and start PostgreSQL
+      service:
+        name: postgresql
+        enabled: yes
+        state: started
+
+    - name: Enable and start Zabbix Server
+      service:
+        name: zabbix-server
+        enabled: yes
+        state: started
+
+    - name: Enable and start nginx
+      service:
+        name: nginx
+        enabled: yes
+        state: started

@@ -21,10 +21,10 @@
                 - /var/log/nginx/error.log
 
           output.elasticsearch:
-            hosts: ["10.130.0.7:9200"]
+            hosts: ["http://elasticsearch.ru-central1.internal:9200"]
 
           setup.kibana:
-            host: "10.128.0.25:5601"
+            host: "http://kibana.ru-central1.internal:5601"
 
     - name: Remove old Filebeat container
       shell: docker rm -f filebeat || true

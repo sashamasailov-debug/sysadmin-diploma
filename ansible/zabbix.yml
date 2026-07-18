@@ -13,8 +13,26 @@
         name: zabbix-agent
         state: present
 
-    - name: Enable and start Zabbix Agent
+    - name: Configure Zabbix Server
+      lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^Server='
+        line: 'Server=zabbix.ru-central1.internal'
+
+    - name: Configure Zabbix Active Server
+      lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^ServerActive='
+        line: 'ServerActive=zabbix.ru-central1.internal'
+
+    - name: Configure Hostname
+      lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^Hostname='
+        line: 'Hostname={{ inventory_hostname }}'
+
+    - name: Restart Zabbix Agent
       service:
         name: zabbix-agent
-        state: started
+        state: restarted
         enabled: yes
